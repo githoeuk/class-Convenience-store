@@ -4,7 +4,9 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
+// lombook추가
 @Setter
 @Getter
 @NoArgsConstructor
@@ -22,7 +24,7 @@ public class Product {
     private BigDecimal cost;
     private int stock;
     private int minStock;
-    private LocalDate expireDate;
+    private Date expireDate;
     private boolean isActive;
 
 }

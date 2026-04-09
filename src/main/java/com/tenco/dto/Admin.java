@@ -2,6 +2,8 @@ package com.tenco.dto;
 
 import lombok.*;
 
+// lombook추가
+
 @Setter
 @Getter
 @NoArgsConstructor

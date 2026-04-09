@@ -5,6 +5,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+// loombok추가
 @Setter
 @Getter
 @NoArgsConstructor
@@ -18,5 +19,5 @@ public class Sales {
     private int productId;
     private int quantity;
     private BigDecimal unitPrice;
-    private LocalDate soldAt;
+    private LocalDate soldAt; // 데이터타입_localDate로 수정
 }
