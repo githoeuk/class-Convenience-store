@@ -53,26 +53,30 @@ public class ProductDAO {
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()
+
         ) {
             pstmt.setString(1, barcode);
-            if (rs.next() == false) {
-                throw new SQLException("바코드에 해당하는 상품이 없습니다");
-            } else {
-                Product product = Product.builder()
-                        .id(rs.getInt("id"))
-                        .barcode(rs.getString("barcode"))
-                        .name(rs.getString("name"))
-                        .category(rs.getString("category"))
-                        .price(rs.getBigDecimal("price"))
-                        .cost(rs.getBigDecimal("cost"))
-                        .stock(rs.getInt("stock"))
-                        .minStock(rs.getInt("min_stock"))
-                        .expireDate(rs.getDate("expire_date").toLocalDate())
-                        .isActive(rs.getBoolean("is_active"))
-                        .build();
-                return product;
-            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+
+                if (rs.next() == false) {
+                    throw new SQLException("바코드에 해당하는 상품이 없습니다");
+                } else {
+                    Product product = Product.builder()
+                            .id(rs.getInt("id"))
+                            .barcode(rs.getString("barcode"))
+                            .name(rs.getString("name"))
+                            .category(rs.getString("category"))
+                            .price(rs.getBigDecimal("price"))
+                            .cost(rs.getBigDecimal("cost"))
+                            .stock(rs.getInt("stock"))
+                            .minStock(rs.getInt("min_stock"))
+                            .expireDate(rs.getDate("expire_date").toLocalDate())
+                            .isActive(rs.getBoolean("is_active"))
+                            .build();
+                    return product;
+                }
+            } // end of rs
+
         } // end of pstmt
 
     } // end of findByBarcode
@@ -155,8 +159,8 @@ public class ProductDAO {
                 Connection conn = DBConnectionManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql);
         ) {
-            try(ResultSet rs = pstmt.executeQuery()){
-                while (rs.next()){
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
                     Product product = Product.builder()
                             .id(rs.getInt("id"))
                             .barcode(rs.getString("barcode"))

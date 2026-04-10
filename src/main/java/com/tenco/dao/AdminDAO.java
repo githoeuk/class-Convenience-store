@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class AdminDAO {
 
 
-/*
+
     public Admin login(String name , String password) throws SQLException {
         String sql =
                 """
@@ -21,7 +21,7 @@ public class AdminDAO {
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
-            pstmt.setString(1, adminId);
+            pstmt.setString(1, name);
             pstmt.setString(2, password);
 
             try (ResultSet rs = pstmt.executeQuery()) {

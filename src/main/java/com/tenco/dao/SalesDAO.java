@@ -27,9 +27,9 @@ public class SalesDAO {
                     """;
             try (PreparedStatement checkPstmt = conn.prepareStatement(checkSql)) {
                 checkPstmt.setInt(1, product.getId());
-                checkPstmt.setInt(2,count);
+                checkPstmt.setInt(2, count);
 
-                try (ResultSet rs = checkPstmt.executeQuery()){
+                try (ResultSet rs = checkPstmt.executeQuery()) {
                     if (rs.next() == false) {
                         throw new SQLException("존재하지 않는 상품입니다. 상품ID : " + product);
                     }
@@ -41,10 +41,10 @@ public class SalesDAO {
             String updateSql = """
                     INSERT INTO sales ( product_id,quantity,unit_price ) values (? , ? ,?)                    
                     """;
-            try(PreparedStatement updatePstmt = conn.prepareStatement(updateSql)){
-                updatePstmt.setInt(1,product.getId());
-                updatePstmt.setInt(2,count);
-                updatePstmt.setBigDecimal(3,product.getPrice());
+            try (PreparedStatement updatePstmt = conn.prepareStatement(updateSql)) {
+                updatePstmt.setInt(1, product.getId());
+                updatePstmt.setInt(2, count);
+                updatePstmt.setBigDecimal(3, product.getPrice());
                 updatePstmt.executeUpdate();
             } // end of updatePstmt
 
@@ -54,20 +54,20 @@ public class SalesDAO {
                     SET stock = stock - 1
                     WHERE id = ?
                     """;
-            try(PreparedStatement fixPstmt = conn.prepareStatement(fixSql)){
-                fixPstmt.setInt(1,product.getId());
+            try (PreparedStatement fixPstmt = conn.prepareStatement(fixSql)) {
+                fixPstmt.setInt(1, product.getId());
                 fixPstmt.executeUpdate();
             }
 
             conn.commit();
         } catch (SQLException e) {
-            if (conn != null){
+            if (conn != null) {
                 conn.rollback();
             }
             System.out.println("오류 발생 : " + e.getMessage());
             return false;
-        }finally {
-            if (conn != null){
+        } finally {
+            if (conn != null) {
 
                 conn.setAutoCommit(true);
                 conn.close();
@@ -80,13 +80,43 @@ public class SalesDAO {
     public List<Sales> findTodaySales() throws SQLException {
         List<Sales> salesList = new ArrayList<>();
         String sql = """
-                select name ,(s.quantity * s.unit_price) - (s.quantity * p.cost) as '오늘 매출액'
-                from sales s
-                left join product p on s.product_id = p.id
-                where date(s.sold_at) = current_date();
+                select s.id, p.id, p.name, s.quantity, s.unit_price , s.sold_at
+                from product p
+                join sales s on s.product_id = p.id
+                where date(s.sold_at) = current_date()
+                group by s.id;
                 """;
-        // DTO 새로 생성 해야 함
 
+        try (Connection conn = DBConnectionManager.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ){
+            try (ResultSet rs = pstmt.executeQuery()){
+                if (rs.next() == false){
+                    throw new SQLException("판매 내역이 없습니다.");
+                }
+                while (rs.next()){
+                    Sales sales = Sales.builder()
+                            .id(rs.getInt("s.id"))
+                            .productId(rs.getInt("p.id"))
+                            .productName(rs.getString("name"))
+                            .quantity(rs.getInt("quantity"))
+                            .unitPrice(rs.getBigDecimal("unit_Price"))
+                            .soldAt(rs.getDate("sold_at").toLocalDate())
+                            .build();
+                    salesList.add(sales);
+                }
+            } // end of rs
+        } // end of pstmt
+        return salesList;
     } // end of findTodaySales
 
+    public static void main(String[] args) {
+        SalesDAO salesDAO = new SalesDAO();
+        try {
+            System.out.println(salesDAO.findTodaySales());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
