@@ -110,18 +110,18 @@ public class StoreService {
         // 14. 1단계: 상품 존재 여부 확인
         Product product = productDAO.findByBarcode(barcode);
         if (product == null) {
-            return "[ERROR] 해당 바코드의 상품이 없습니다.";
+            throw new SQLException( "[ERROR] 해당 바코드의 상품이 없습니다.");
         }
 
         // 15. 2단계: 재고 충분 여부 확인 (비즈니스 검증)
         if (product.getStock() < quantity) {
-            return String.format("[ERROR] 재고 부족. 현재 재고: %d개", product.getStock());
+            throw new SQLException(String.format("[ERROR] 재고 부족. 현재 재고: %d개", product.getStock()));
         }
 
         // 16. 3단계: DAO에 판매 실행 위임 (트랜잭션은 DAO 내부에서 처리)
         boolean success = salesDAO.processSale(product, quantity);
         if (!success) {
-            return "[ERROR] 판매 처리 중 오류가 발생했습니다.";
+            throw new SQLException("[ERROR] 판매 처리 중 오류가 발생했습니다.");
         }
 
         // 17. 4단계: 성공 메시지 생성
