@@ -8,9 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class adminDAO {
+public class AdminDAO {
 
 
+/*
     public Admin login(String name , String password) throws SQLException {
         String sql =
                 """
@@ -35,5 +36,6 @@ public class adminDAO {
         } // end of pstmt
         return null;
     } // end of login
+*/
 
 } // end of class
