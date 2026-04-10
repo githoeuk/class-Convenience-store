@@ -67,6 +67,16 @@ public class StoreService {
         }
     } // end of isLoggedIn
 
+    // 관리자 이름 출력
+    public String getCurrentAdminName() throws SQLException {
+        if (admin != null) {
+            return admin.getName();
+        } else {
+            throw new SQLException("로그인 후 이용가능합니다");
+        }
+
+    } // end of getCurrentAdminName
+
     // 3단계 - 상품 목록 + 알림 로직
     // 서비스에서는 단순 작업도 있음 (단순 DAO 위임)
     // 즉, 단순 조회는 DAO 메서를 바로 호출하여 반환 한다.
@@ -74,10 +84,18 @@ public class StoreService {
     public List<Product> getProductList() throws SQLException {
         // 추후 유효성 검사, 로직 변경 되었을 때 유연함을 만들어 줌.
         return productDAO.findAll();
-
-
         //return null;
-    }
+    } // getProductList
+
+
+    // 14. 1단계: 상품 존재 여부 확인
+    public Product findByBarcode(String barcode) throws SQLException {
+        Product product = productDAO.findByBarcode(barcode);
+        if (product == null) {
+            return null;
+        }
+        return product;
+    } // end of findByBarcode
 
 
     // 4.판매 처리 로직
@@ -133,4 +151,13 @@ public class StoreService {
         return salesDAO.findTodaySales();
     }
 
+    // 상품 등록
+    public boolean addProduct(Product product) throws SQLException {
+        return productDAO.insert(product);
+    }
+
+    // 상품 수정
+    public boolean updateProduct(Product product) throws SQLException {
+        return  productDAO.update(product);
+    }
 }

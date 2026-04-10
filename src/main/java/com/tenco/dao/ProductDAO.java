@@ -59,7 +59,7 @@ public class ProductDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
 
                 if (rs.next() == false) {
-                    throw new SQLException("바코드에 해당하는 상품이 없습니다");
+                    return null;
                 } else {
                     Product product = Product.builder()
                             .id(rs.getInt("id"))
@@ -83,7 +83,7 @@ public class ProductDAO {
 
 //3단계 - 상품 등록 (insert)
 
-    public void insert(Product product) throws SQLException {
+    public boolean insert(Product product) throws SQLException {
 
         String sql = """
                 INSERT INTO product (barcode,name,category,price,cost)
@@ -93,13 +93,16 @@ public class ProductDAO {
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
+
             pstmt.setString(1, product.getBarcode());
             pstmt.setString(2, product.getName());
             pstmt.setString(3, product.getCategory());
             pstmt.setBigDecimal(4, product.getPrice());
             pstmt.setBigDecimal(5, product.getCost());
+            pstmt.executeUpdate();
+            int rows = pstmt.executeUpdate();
+            return rows >= 0;
         } // end of pstmt
-
     } // end of insert
 
 
