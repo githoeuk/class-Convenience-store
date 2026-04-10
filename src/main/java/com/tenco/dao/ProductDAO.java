@@ -33,7 +33,7 @@ public class ProductDAO {
                         .cost(rs.getBigDecimal("cost"))
                         .stock(rs.getInt("stock"))
                         .minStock(rs.getInt("min_stock"))
-                        .expireDate(rs.getDate("expire-date").toLocalDate())
+                        .expireDate(rs.getDate("expire_date").toLocalDate())
                         .isActive(rs.getBoolean("is_active"))
                         .build();
                 productList.add(product);
@@ -170,7 +170,7 @@ public class ProductDAO {
                             .cost(rs.getBigDecimal("cost"))
                             .stock(rs.getInt("stock"))
                             .minStock(rs.getInt("min_stock"))
-                            .expireDate(rs.getDate("expire-date").toLocalDate())
+                            .expireDate(rs.getDate("expire_date").toLocalDate())
                             .isActive(rs.getBoolean("is_active"))
                             .build();
                     productList.add(product);

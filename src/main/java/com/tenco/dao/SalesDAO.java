@@ -80,11 +80,11 @@ public class SalesDAO {
     public List<Sales> findTodaySales() throws SQLException {
         List<Sales> salesList = new ArrayList<>();
         String sql = """
-                select s.id, p.id, p.name, s.quantity, s.unit_price , s.sold_at
+                select p.name, sum(s.quantity) as quantity, sum(s.unit_price * s.quantity) as 'price'
                 from product p
                 join sales s on s.product_id = p.id
                 where date(s.sold_at) = current_date()
-                group by s.id;
+                group by p.name;
                 """;
 
         try (Connection conn = DBConnectionManager.getConnection();
@@ -96,12 +96,9 @@ public class SalesDAO {
                 }
                 while (rs.next()){
                     Sales sales = Sales.builder()
-                            .id(rs.getInt("s.id"))
-                            .productId(rs.getInt("p.id"))
-                            .productName(rs.getString("name"))
+                            .productName(rs.getString("p.name"))
                             .quantity(rs.getInt("quantity"))
-                            .unitPrice(rs.getBigDecimal("unit_Price"))
-                            .soldAt(rs.getDate("sold_at").toLocalDate())
+                            .totalPrice(rs.getBigDecimal("price"))
                             .build();
                     salesList.add(sales);
                 }
