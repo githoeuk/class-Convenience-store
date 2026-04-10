@@ -58,7 +58,7 @@ public class StoreService {
         }
     } // end of logout
 
-    //로그인 유무
+    //로그인 상태 확인
     public boolean isLoggedIn() {
         if (admin != null) {
             return true;
@@ -158,6 +158,18 @@ public class StoreService {
 
     // 상품 수정
     public boolean updateProduct(Product product) throws SQLException {
-        return  productDAO.update(product);
+        return productDAO.update(product);
     }
+
+    // 상품 소프트 삭제(DAO)
+    public boolean deleteProduct(int productId) throws SQLException {
+        return productDAO.softDelete(productId);
+    } // end of getLowStockProducts
+
+    // 재고 부족 상품 목록
+    public List<Product>getLowStockProducts() throws SQLException {
+        return productDAO.findLowStock();
+    }
+
+
 }

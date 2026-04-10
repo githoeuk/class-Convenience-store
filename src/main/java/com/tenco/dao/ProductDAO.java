@@ -133,7 +133,7 @@ public class ProductDAO {
     } // end of update
 
     //5단계 - 소프트 삭제 (delete)
-    public void softDelete(int id) throws SQLException {
+    public boolean softDelete(int id) throws SQLException {
 
         String sql = """
                 UPDATE product
@@ -146,8 +146,7 @@ public class ProductDAO {
         ) {
 
             pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-
+            return pstmt.executeUpdate() >= 0;
         }
     } // end if softDelete
 
