@@ -1,8 +1,10 @@
 package com.tenco.service;
 
-import com.tenco.dao.adminDAO;
+import com.tenco.dao.AdminDAO;
+import com.tenco.dto.Admin;
 import com.tenco.dto.Product;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class StoreService {
@@ -17,13 +19,26 @@ public class StoreService {
      *
      */
 
-    adminDAO adminDAO = new adminDAO();
+    AdminDAO adminDAO = new AdminDAO();
 
-    public boolean login(String id, String password){
+    public boolean login(String adminId, String password) throws SQLException {
 
+        if (adminId == null || adminId.trim().isEmpty() ){
+            throw new SQLException("ID를 입력하세요");
+        }
+        if (password == null || password.trim().isEmpty() ){
+            throw new SQLException("비밀번호를 입력하세요");
+        }
+        Admin admin = adminDAO.login(adminId,password);
 
-
-    }
+        if (admin == null){
+            System.out.println("아이디 혹은 비밀번호가 잘못되었습니다.");
+            return false;
+        }else {
+            System.out.println(admin.getName()+ "님 환영합니다");
+            return true;
+        }
+    } // end of login
 
 
     // 서비스에서는 단순 작업도 있음 (단순 DAO 위임)

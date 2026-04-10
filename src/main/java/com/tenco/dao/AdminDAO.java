@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class adminDAO {
+public class AdminDAO {
 
     // 사고 흐름 - 관리자 로그인 처리
     // 1. 쿼리 결정 -> id,pw, 쿼리에 던져서 일치하는 행을 조회 해야 한다. -> SELECT
@@ -65,7 +65,7 @@ public class adminDAO {
         // SQLException 는 checked exception 이다
         // 강제적으로 처리해야하는 강제성이 생긴다.
         try{
-            adminDAO adminDAO = new adminDAO();
+            AdminDAO adminDAO = new AdminDAO();
             Admin admin = adminDAO.login("admin", "admin123");
             System.out.println(admin.toString());
         } catch (Exception e) {
