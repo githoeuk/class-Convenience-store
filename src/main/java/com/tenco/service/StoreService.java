@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class StoreService {
-
-
     /**
      * Service 계층의 역할
      *
@@ -88,4 +86,4 @@ public class StoreService {
         return product.getStock() <= product.getMinStock();
     }
 
-} // end of class
+}

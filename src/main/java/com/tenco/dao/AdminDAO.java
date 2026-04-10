@@ -10,22 +10,12 @@ import java.sql.SQLException;
 
 public class AdminDAO {
 
-    // 사고 흐름 - 관리자 로그인 처리
-    // 1. 쿼리 결정 -> id,pw, 쿼리에 던져서 일치하는 행을 조회 해야 한다. -> SELECT
-    // 2. 커넥션 객체 가져오기 (외부 자원을 열어두면 메모리 누스 close() , try re...
-    // 3. 쿼리 생성 및 요청 객체 만들기
-    //      - Pstmt 결정, ? , ? 바인딩 처리,
-    //      - excuteQuery()
-    // 4. 결과집합을 DTO에 담기
-    //     - rs.next() 가 true -> 일치하는 행이 존재 함.
-    // 5. 리턴 결과 결정 -> 성공 : rs 에서 컬럼값을 꺼내서 Admin 객체에 담기
-    //                    실패 : null 반환
 
-
-    public Admin login(String adminId, String password) {
-
-        String sql = """
-                SELECT * FROM admins WHERE admin_id = ? and password = ?
+/*
+    public Admin login(String name , String password) throws SQLException {
+        String sql =
+                """
+                SELECT * FROM admins WHERE admin_id = ? AND password = ? 
                 """;
 
         try (Connection conn = DBConnectionManager.getConnection();
