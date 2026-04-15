@@ -142,7 +142,7 @@ public class StoreService {
 
     // 유통기한 임박
     public boolean isNearExpiry(Product product) {
-        if (product.getExpireDate() == null) return false;
+            if (product.getExpireDate() == null) return false;
         return !product.getExpireDate().isAfter(java.time.LocalDate.now().plusDays(3));
     }
 

@@ -19,8 +19,6 @@ public class StoreView {
         StoreView storeView = new StoreView();
 
        storeView.start();
-
-
     }
 
     // 9번 재고 부족 알림
