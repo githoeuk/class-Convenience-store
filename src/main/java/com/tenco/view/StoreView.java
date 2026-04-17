@@ -5,6 +5,8 @@ import com.tenco.service.StoreService;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -102,14 +104,21 @@ public class StoreView {
             System.out.println("다시 입력해주세요");
             return;
         }
+
+        System.out.println("유효기간 : ");
+        LocalDate expire = LocalDate.parse(sc.nextLine().trim());
+        if (expire == null){
+            System.out.println("다시 입력해주세요");
+            return;
+        }
         Product product = Product.builder()
                 .barcode(barcode)
                 .name(name)
                 .category(category)
                 .price(BigDecimal.valueOf(price))
                 .cost(BigDecimal.valueOf(cost))
+                .expireDate(expire)
                 .build();
-
 
         boolean check = service.addProduct(product);
         if (check){
